@@ -76,14 +76,16 @@ const updateProductIntoDB = async(id:string,product:IProduct,file:any)=>{
 
 // Delete Single Product
 const deleteProductFromDB = async(id:string) =>{
-  
-  const isProductExist = await Product.findById(id);
-  if (!isProductExist) {
-    return false;
+
+  const isProductExist = await Product.isProductExists(id)
+
+  if(!isProductExist){
+    throw new AppError(httpStatus.NOT_FOUND, 'Product Not Found!!');
   }
+  
   const result = await Product.findByIdAndDelete(id);
 
-    return result;
+  return result;
 }
 
 export const ProductServices = {
