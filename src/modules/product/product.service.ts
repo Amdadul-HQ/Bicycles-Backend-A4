@@ -1,8 +1,10 @@
 import QueryBuilder from "../../app/builder/QueryBuilder";
+import { AppError } from "../../app/errors/AppError";
 import { sendImageToCloudinary } from "../../app/utils/sendImageTOCloudinary";
 import { ProductSearchableFields } from "./product.constant";
 import { IProduct } from "./product.interface";
 import { Product } from "./product.model";
+import httpStatus from 'http-status';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const productCreateIntoDB = async (file:any,product: IProduct)=>{
@@ -39,11 +41,14 @@ const getAllProductFromDB = async (query:Record<string,unknown>) => {
 
 // Get Single Product
 const getSingleProductFromDB = async(id:string) =>{
-    const result = await Product.findById(id);
-    if(result){
-      return result
+
+    const isProductExist = await Product.isProductExists(id)
+
+    if(!isProductExist){
+      throw new AppError(httpStatus.NOT_FOUND, 'Product Not Found!!');
     }
-    return false;
+    const result = await Product.findById(id);
+    return result
 }
 
 // Update Single Product

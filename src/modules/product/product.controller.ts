@@ -2,9 +2,11 @@ import httpStatus from "http-status";
 import { Request, Response } from 'express';
 import { ProductServices } from './product.service';
 import sendResponse from '../../app/utils/sendResponse';
+import { catchAsync } from "../../app/utils/catchAsync";
+
 // Create a Product
-const createProduct = async (req:Request,res:Response,) =>{
-    try{
+const createProduct = catchAsync(async (req, res) => {
+
       const product = req.body;
       
       const result = await ProductServices.productCreateIntoDB(req.file,product);
@@ -15,62 +17,31 @@ const createProduct = async (req:Request,res:Response,) =>{
         statusCode:httpStatus.CREATED,
         data:result
       })
-    }
-    catch(error :unknown){
-      res.send({
-        message: 'Something went wrong',
-        success: false,
-        error,
-      });
-    }
-}
+})
 
 // Get All Product
-const getAllProduct = async (req:Request,res:Response) => {
-    try{
-
+const getAllProduct = catchAsync(async(req,res) => {
       const result = await ProductServices.getAllProductFromDB(req.query);
-      res.status(200).json({
-        message: 'Bicycles retrieved successfully',
-        status: true,
-        data: result
+      sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'All Products Retrieve successfully',
+        data: result,
       });
-    }
-    catch(error:unknown){
-      res.send({
-        message: 'Something went wrong',
-        success: false,
-        error,
-      });
-    }
-} 
+})
 
 // Get A Specific Product
-const getSingleProduct = async(req:Request,res:Response) => {
-  try{
+const getSingleProduct = catchAsync(async(req,res) => {
+  // try{
     const {productId} = req.params;
     const result = await ProductServices.getSingleProductFromDB(productId);
-
-    if(!result){
-      res.send({
-        message:"Bicycle Not Founded",
-        status:false,
-      })
-    }
-     res.status(200).json({
-       message: 'Bicycles retrieved successfully',
-       status: true,
-       data: result,
-     });
-
-  }catch(error){
-    res.send({
-      message: 'Something went wrong',
-      success: false,
-      error,
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Single Product Data Retrieve successfully',
+      data: result,
     });
-  }
-}
+})
 
 // Update A Specific Product
 const updateProduct = async (req: Request, res: Response) => {
