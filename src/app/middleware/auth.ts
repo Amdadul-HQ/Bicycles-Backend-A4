@@ -16,7 +16,6 @@ const auth = (...requiredRoles:TUserRole[]) => {
       // validation
       const token = req?.headers?.authorization?.split(' ')[1];
 
-      
       // is token sended
       if(!token){
           throw new AppError(httpStatus.UNAUTHORIZED,'You are not authorized');
@@ -50,7 +49,7 @@ const auth = (...requiredRoles:TUserRole[]) => {
      }
 
      req.user = decoded
-
+     console.log(req.user);
      next();
     
   })

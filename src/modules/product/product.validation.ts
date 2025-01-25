@@ -4,7 +4,7 @@ import { z } from 'zod';
 export const productZodSchema = z.object({
   body:z.object({
   name: z.string().min(1, 'Name is required'),
-  image:z.string(),
+  image:z.string().optional(),
   brand: z.string().min(1, 'Brand is required'),
   price: z.number().positive('Price must be positive'),
   category: z.enum(['Mountain', 'Road', 'Hybrid', 'BMX', 'Electric']),

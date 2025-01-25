@@ -7,7 +7,7 @@ const createProduct = async (req:Request,res:Response,) =>{
     try{
       const product = req.body;
       
-      const result = await ProductServices.productCreateIntoDB(product);
+      const result = await ProductServices.productCreateIntoDB(req.file,product);
 
       sendResponse(res,{
         success:true,
@@ -28,8 +28,8 @@ const createProduct = async (req:Request,res:Response,) =>{
 // Get All Product
 const getAllProduct = async (req:Request,res:Response) => {
     try{
-      const {searchTerm} = req.query;
-      const result = await ProductServices.getAllProductFromDB(searchTerm as string);
+
+      const result = await ProductServices.getAllProductFromDB(req.query);
       res.status(200).json({
         message: 'Bicycles retrieved successfully',
         status: true,
