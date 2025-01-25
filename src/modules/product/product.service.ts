@@ -52,14 +52,25 @@ const getSingleProductFromDB = async(id:string) =>{
 }
 
 // Update Single Product
-const updateProductIntoDB = async(id:string,data:IProduct)=>{
+const updateProductIntoDB = async(id:string,product:IProduct,file:any)=>{
 
-  const isProductExist = await Product.findById(id);
-  if (!isProductExist) {
-    return false;
+  const isProductExist = await Product.isProductExists(id);
+
+  if(!isProductExist){
+    throw new AppError(httpStatus.NOT_FOUND, 'Product Not Found!!');
   }
 
-  const result = await Product.findByIdAndUpdate(id, data, { new: true });
+  if(file){
+    const path = file?.path;
+
+     //upload image
+     const imageName = `${product.name}`;
+
+    const { secure_url } = await sendImageToCloudinary(imageName, path);
+    product.image = secure_url as string;
+  }
+
+  const result = await Product.findByIdAndUpdate(id, {...product}, { new: true });
   return result;
 }
 

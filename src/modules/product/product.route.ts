@@ -26,7 +26,14 @@ router.get('/',ProductController.getAllProduct);
 router.get('/:productId',ProductController.getSingleProduct)
 
 // Update A Specific Bicycle
-router.put('/:productId',ProductController.updateProduct)
+router.patch('/:productId',
+    auth(USER_ROLE.admin),
+    upload.single('file'),
+    (req:Request,res:Response,next:NextFunction)=>{
+    req.body = JSON.parse(req.body.data);
+    next()
+    },
+    ProductController.updateProduct)
 
 // Delete A Bicycle
 router.delete('/:productId',ProductController.deleteProduct)

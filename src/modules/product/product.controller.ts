@@ -32,7 +32,7 @@ const getAllProduct = catchAsync(async(req,res) => {
 
 // Get A Specific Product
 const getSingleProduct = catchAsync(async(req,res) => {
-  // try{
+
     const {productId} = req.params;
     const result = await ProductServices.getSingleProductFromDB(productId);
     sendResponse(res, {
@@ -44,37 +44,20 @@ const getSingleProduct = catchAsync(async(req,res) => {
 })
 
 // Update A Specific Product
-const updateProduct = async (req: Request, res: Response) => {
-  try {
+const updateProduct = catchAsync(async (req, res) => {
+
     const { productId } = req.params;
     const updateData = req.body;
     
+    const result = await ProductServices.updateProductIntoDB(productId,updateData,req.file);
 
-    const result = await ProductServices.updateProductIntoDB(
-      productId,
-      updateData,);
-
-    if (!result) {
-        res.status(404).send({
-        message: 'Bicycle not founded',
-        status: false,
-      });
-    }
-    else{
-      res.status(200).json({
-        message: 'Bicycle updated successfully',
-        status: true,
-        data: result,
-      });
-    }
-  } catch (error) {
-    res.status(404).send({
-      message:'Something went wrong',
-      sussess:false,
-      error
-    })
-  }
-};
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Update Product Data Successfully',
+      data: result,
+    });
+});
 
 // Delete A Specific Product
 const deleteProduct = async (req:Request,res:Response) =>{
