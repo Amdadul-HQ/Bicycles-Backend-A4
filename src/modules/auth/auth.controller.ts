@@ -4,7 +4,7 @@ import sendResponse from "../../app/utils/sendResponse";
 import config from "../../app/config";
 import { AuthServices } from "./auth.service";
 
-const loginuser = catchAsync(async (req, res) => {
+const loginUser = catchAsync(async (req, res) => {
   const result = await AuthServices.loginUserInToDB(req.body);
 
   const { refreshToken, token } = result;
@@ -24,5 +24,5 @@ const loginuser = catchAsync(async (req, res) => {
 
 
 export const AuthController = {
-    loginuser
+  loginUser
 }

@@ -12,7 +12,7 @@ AuthRoute.post('/signup',validateRequest(userValidation.createUserValidationSche
 
 
 // Login 
-AuthRoute.post('/login',validateRequest(AuthValidation.loginValidationSchema),AuthController.loginuser);
+AuthRoute.post('/login',validateRequest(AuthValidation.loginValidationSchema),AuthController.loginUser);
 
 
 
