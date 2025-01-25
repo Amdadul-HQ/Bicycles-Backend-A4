@@ -4,7 +4,7 @@ import sendResponse from "../../app/utils/sendResponse";
 import { UserService } from "./user.service";
 
 const userSingUp = catchAsync(async(req,res)=>{
-    const result = await UserService.signUpInToDB(req.body);
+    const result = await UserService.userSignUpInToDB(req.body);
     sendResponse(res,{
         success:true,
         statusCode:httpStatus.CREATED,
