@@ -8,7 +8,8 @@ export interface IProduct {
     category:"Mountain" | "Road" | "Hybrid" | "BMX" | "Electric",
     description:string,
     quantity:number,
-    inStock:boolean
+    inStock:boolean,
+    isDeleted:boolean
 }
 
 export interface IProductModel extends Model<IProduct> {

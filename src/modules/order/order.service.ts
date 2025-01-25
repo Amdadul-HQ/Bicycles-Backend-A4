@@ -15,6 +15,7 @@ const orderCreateIntoDB = async (order: IOrder) => {
 
     const productDetails = await Product.isProductExists(product)
 
+
     if(!productDetails){
       throw new AppError(httpStatus.NOT_FOUND, 'Product Not Found!!');
     }
@@ -29,16 +30,20 @@ const orderCreateIntoDB = async (order: IOrder) => {
         productDetails.inStock = false;
     }
     
-    const updateProduct = await Product.findByIdAndDelete([product,productDetails],{session})
+    const updateProduct = await Product.findByIdAndUpdate(
+      product, 
+      { $inc: { quantity: -quantity }, inStock: productDetails.quantity > quantity }, 
+      { session }
+    );
 
     if(!updateProduct){
       throw new AppError(httpStatus.BAD_GATEWAY,'Failed to Place Order')
     }
+    console.log(order,'order');
+    const result = await Order.create([order],{session});
 
     await session.commitTransaction();
     await session.endSession();
-
-    const result = await Order.create([productDetails],{session});
     return result
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   }catch (err: any) {

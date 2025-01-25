@@ -11,6 +11,7 @@ export const productZodSchema = z.object({
   description: z.string().min(1, 'Description is required'),
   quantity: z.number().int().min(1, 'Quantity must be a non-negative integer'),
   inStock: z.boolean(),
+  isDeleted:z.boolean().default(false)
   })
 });
 
