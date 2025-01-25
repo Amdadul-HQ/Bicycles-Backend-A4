@@ -65,19 +65,15 @@ const deleteProduct = catchAsync(async (req,res) =>{
     const {productId} = req.params;
     const result = await ProductServices.deleteProductFromDB(productId);
 
-    
-
-  //  if (!result) {
-  //     res.status(404).send({
-  //      message: 'Bicycle not founded',
-  //      status: false,
-  //    });
-  //  }
-  //   res.status(200).json({
-  //     message: 'Bicycle deleted successfully',
-  //     status:true,
-  //     data: {}
-  //   });
+    if(result){
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Product Deleted Successfully',
+      data: null,
+    });
+  }
+  
 });
 
 export const ProductController = {
