@@ -11,7 +11,7 @@ const createUserValidationSchema = z.object({
     email: z
       .string()
       .email('Invalid Email Address')
-      .min(1, 'Student Email is Required'),
+      .min(1, 'User Email is Required'),
     password: z
       .string()
       .min(1, 'Password is Required')
