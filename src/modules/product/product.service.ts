@@ -1,5 +1,6 @@
 import QueryBuilder from "../../app/builder/QueryBuilder";
 import { sendImageToCloudinary } from "../../app/utils/sendImageTOCloudinary";
+import { ProductSearchableFields } from "./product.constant";
 import { IProduct } from "./product.interface";
 import { Product } from "./product.model";
 
@@ -26,6 +27,7 @@ const getAllProductFromDB = async (query:Record<string,unknown>) => {
     Product.find(),
     query,
   )
+    .search(ProductSearchableFields)
     .filter()
     .sort()
     .paginate()
