@@ -4,9 +4,10 @@ import { IProduct } from './product.interface';
 const productSchema = new Schema<IProduct>(
   {
     name: { type: String, required: true, trim: true },
+    image:{ type:String,required:true,trim:true},
     brand: { type: String, required: true, trim: true },
     price: { type: Number, required: true, min: 0 },
-    type: {
+    category: {
       type: String,
       required: true,
       enum: ['Mountain', 'Road', 'Hybrid', 'BMX', 'Electric'],

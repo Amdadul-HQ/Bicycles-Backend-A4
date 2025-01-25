@@ -1,20 +1,20 @@
+import httpStatus from "http-status";
 import { Request, Response } from 'express';
 import { ProductServices } from './product.service';
-import { productZodSchema } from './product.validation';
-
+import sendResponse from '../../app/utils/sendResponse';
 // Create a Product
 const createProduct = async (req:Request,res:Response,) =>{
     try{
       const product = req.body;
-      const zodValidateData = productZodSchema.parse(product);
       
-      const result = await ProductServices.productCreateIntoDB(zodValidateData);
+      const result = await ProductServices.productCreateIntoDB(product);
 
-      res.status(201).json({
-          message: 'Bicycle created successfully',
-          success: true,
-          data:result
-      });
+      sendResponse(res,{
+        success:true,
+        message:'Product Added Successfully',
+        statusCode:httpStatus.CREATED,
+        data:result
+      })
     }
     catch(error :unknown){
       res.send({

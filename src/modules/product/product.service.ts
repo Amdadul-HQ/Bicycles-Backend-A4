@@ -13,7 +13,7 @@ const getAllProductFromDB = async (searchTerm : string) => {
           $or: [
             { name: searchTerm },
             { brand: searchTerm },
-            { type: searchTerm },
+            { category: searchTerm },
           ],
         }
       : {};

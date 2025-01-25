@@ -1,10 +1,23 @@
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 import { ProductController } from "./product.controller";
+import auth from "../../app/middleware/auth";
+import { USER_ROLE } from "../user/user.constant";
+import { upload } from "../../app/utils/sendImageTOCloudinary";
+import validateRequest from "../../app/middleware/validateRequest";
+import { productZodSchema } from "./product.validation";
 
 const router = express.Router();
 
 // create a product
-router.post('/',ProductController.createProduct);
+router.post('/add-bicycle',
+    auth(USER_ROLE.admin),
+    upload.single('file'),
+    (req:Request,res:Response,next:NextFunction)=>{
+    req.body = JSON.parse(req.body.data);
+    next()
+  },
+  validateRequest(productZodSchema),
+  ProductController.createProduct);
 
 // Get All Bicycles
 router.get('/',ProductController.getAllProduct);
