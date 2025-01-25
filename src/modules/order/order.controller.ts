@@ -1,59 +1,69 @@
-import { Request, Response } from 'express';
-import { orderSchema } from './order.validation';
+import { catchAsync } from '../../app/utils/catchAsync';
+import sendResponse from '../../app/utils/sendResponse';
 import { OrderServices } from './order.service';
-import { ProductServices } from '../product/product.service';
+import { Request, Response } from 'express';
+import httpStatus from 'http-status';
 
-const createOrder = async (req: Request, res: Response) => {
-  try {
+const createOrder = catchAsync(async (req, res) => {
+
     const order = req.body;
     
-    const {quantity,product} = order
+    const result = await OrderServices.orderCreateIntoDB(order)
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Order Placed Successfully',
+      data: result,
+    });
 
-    const productData = await ProductServices.getSingleProductFromDB(product)
+
+
+
+  //   const productData = await ProductServices.getSingleProductFromDB(product)
 
     
-    if(!productData){
-        res.send({
-        message: 'Product Not Founded',
-        status: false,
-      });
-    }
-    else{
-      if (productData.quantity < quantity) {
-          res.send({
-          message: 'Insufficient Stock',
-          status: false,
-        });
-      }
+  //   if(!productData){
+  //       res.send({
+  //       message: 'Product Not Founded',
+  //       status: false,
+  //     });
+  //   }
+  //   else{
+  //     if (productData.quantity < quantity) {
+  //         res.send({
+  //         message: 'Insufficient Stock',
+  //         status: false,
+  //       });
+  //     }
 
-      productData.quantity -= quantity;
+  //     productData.quantity -= quantity;
 
-      if (productData.quantity === 0) {
-        productData.inStock = false;
-      }
+  //     if (productData.quantity === 0) {
+  //       productData.inStock = false;
+  //     }
 
-      const totalPrice = productData.price * quantity;
+  //     const totalPrice = productData.price * quantity;
 
-      const zodValidateData = orderSchema.parse({ ...order, totalPrice });
+  //     const zodValidateData = orderSchema.parse({ ...order, totalPrice });
 
-      const result = await OrderServices.orderCreateIntoDB(zodValidateData);
+  //     const result = await OrderServices.orderCreateIntoDB(zodValidateData);
 
-      await ProductServices.updateProductIntoDB(product, { ...productData });
+  //     await ProductServices.updateProductIntoDB(product, { ...productData });
 
-      res.status(201).json({
-        message: 'Order created successfully',
-        status: true,
-        data: result,
-      });
-    }
-  } catch (error: unknown) {
-   res.status(401).send({
-     message: 'something went worng',
-     success: false,
-     data: error,
-   });
-  }
-};
+  //     res.status(201).json({
+  //       message: 'Order created successfully',
+  //       status: true,
+  //       data: result,
+  //     });
+  //   }
+  // } catch (error: unknown) {
+  //  res.status(401).send({
+  //    message: 'something went worng',
+  //    success: false,
+  //    data: error,
+  //  });
+  // }
+});
 
 // Get Total Revenue;
 

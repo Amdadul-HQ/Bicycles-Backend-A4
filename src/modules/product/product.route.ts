@@ -36,7 +36,7 @@ router.patch('/:productId',
     ProductController.updateProduct)
 
 // Delete A Bicycle
-router.delete('/:productId',ProductController.deleteProduct)
+router.delete('/:productId',auth(USER_ROLE.admin),ProductController.deleteProduct)
 
 
 export const ProductRoutes = router;
