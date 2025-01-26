@@ -9,7 +9,7 @@ const router = express.Router();
 
 // Order place
 router.post('/place-order',
-    auth(USER_ROLE.customer),
+    // auth(USER_ROLE.customer),
     validateRequest(orderSchema),
     OrderController.createOrder);
 

@@ -16,4 +16,6 @@ export default {
   cloud_api_key: process.env.CLOUD_API_KEY,
   cloud_api_secret: process.env.CLOUD_API_SECRET,
   cloud_url: process.env.CLOUDINARY_URL,
+  stripe_public_key:process.env.STRIPE_PUBLISH_KEY,
+  stripe_secret_key:process.env.STRIPE_SECRET_KEY
 };

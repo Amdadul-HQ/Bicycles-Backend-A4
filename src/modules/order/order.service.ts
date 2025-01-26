@@ -13,6 +13,7 @@ const orderCreateIntoDB = async (order: IOrder) => {
   try{
     session.startTransaction();
 
+
     const productDetails = await Product.isProductExists(product)
 
 
@@ -35,6 +36,30 @@ const orderCreateIntoDB = async (order: IOrder) => {
       { $inc: { quantity: -quantity }, inStock: productDetails.quantity > quantity }, 
       { session }
     );
+
+    // const stripeSession = await stripe.checkout.sessions.create({
+    //   payment_method_types: ['card'],
+    //   line_items: [
+    //     {
+    //       price_data: {
+    //         currency: 'usd',
+    //         product_data: {
+    //           name: productDetails.name,
+    //           description: `Quantity of ${quantity}`,
+    //         },
+    //         unit_amount: order.totalPrice * 100, // Convert to cents
+    //       },
+    //       quantity: 1,
+    //     },
+    //   ],
+    //   mode: 'payment',
+    //   success_url: `${process.env.FRONTEND_URL}/success?session_id={CHECKOUT_SESSION_ID}`,
+    //   cancel_url: `${process.env.FRONTEND_URL}/cancel`,
+    //   // metadata: {
+    //   //   orderId: order.,
+    //   // },
+    // });
+    // console.log(stripeSession);
 
     if(!updateProduct){
       throw new AppError(httpStatus.BAD_GATEWAY,'Failed to Place Order')
