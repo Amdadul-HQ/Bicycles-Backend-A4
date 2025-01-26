@@ -42,7 +42,6 @@ const getSingleOrder = catchAsync(async(req,res)=>{
 // get user order
 const getUserOrder = catchAsync(async(req,res)=>{
   const email = req?.user?.email 
-  console.log(email);
   const result = await OrderServices.getUserOrderFromDB(email);
   sendResponse(res,{
     statusCode:httpStatus.OK,
@@ -51,6 +50,26 @@ const getUserOrder = catchAsync(async(req,res)=>{
     data:result
   })
 })
+
+// delete order 
+const deleteOrder = catchAsync(async(req,res)=>{
+  const orderid = req.params.orderId;
+  const email = req?.user?.email
+  const result = await OrderServices.deleteOrderFromDB(orderid,email)
+  if(result){
+    sendResponse(res,{
+      statusCode:httpStatus.OK,
+      success:true,
+      message:'Order Deleted',
+      data:null
+    })
+  }
+})
+
+// order update
+// const orderUpdate = catchAsync(async(req,res)=>{
+//   // const 
+// })
 
 // Get Total Revenue;
 
@@ -81,5 +100,6 @@ export const OrderController = {
     getRevenue,
     getAllOrder,
     getSingleOrder,
-    getUserOrder
+    getUserOrder,
+    deleteOrder
 }

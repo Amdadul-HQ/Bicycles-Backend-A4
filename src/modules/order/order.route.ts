@@ -19,10 +19,18 @@ router.get('/',
     OrderController.getAllOrder)
 
 //get single order
-router.get('/:orderId',OrderController.getSingleOrder) 
+router.get('/:orderId',OrderController.getSingleOrder);
 
 // get user orders
-router.get('/user/order',auth(USER_ROLE.customer,USER_ROLE.admin),OrderController.getUserOrder)
+router.get('/user/order',auth(USER_ROLE.customer,USER_ROLE.admin),OrderController.getUserOrder);
+
+// Order Update
+// router.patch('/user/:orderId',auth(USER_ROLE.customer),OrderController.)
+
+// delete order
+router.delete('/user/:orderId',
+    auth(USER_ROLE.customer),
+    OrderController.deleteOrder)
 
 // Order Revenue
 router.get('/revenue',OrderController.getRevenue)

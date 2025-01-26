@@ -75,6 +75,19 @@ const getUserOrderFromDB = async(email:string)=>{
   return result;
 }
 
+// delete order 
+const deleteOrderFromDB = async(id:string,email:string)=>{
+  const isOrderExists = await Order.isOrderExists(id);
+  if(!isOrderExists){
+    throw new AppError(httpStatus.NOT_FOUND, 'Order Not Found!!');
+  }
+  if(isOrderExists?.email !== email){
+    throw new AppError(httpStatus.UNAUTHORIZED, 'UnAuthorized!!');
+  }
+  const result = await Order.findByIdAndDelete(id)
+  return result
+}
+
 // get revenue
 
 const getRevenueFromDB = async () =>{
@@ -97,5 +110,6 @@ export const OrderServices = {
     getRevenueFromDB,
     getAllOrderFromDB,
     getSingleOrderFromDB,
-    getUserOrderFromDB
+    getUserOrderFromDB,
+    deleteOrderFromDB
 }
