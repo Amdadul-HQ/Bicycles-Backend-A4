@@ -59,6 +59,12 @@ const getAllOrderFromDB = async () => {
   return result
 }
 
+// get single order
+const getSingleOrderFromDB = async(id:string)=>{
+  const result = Order.findById(id).populate('product')
+  return result;
+}
+
 // get revenue
 
 const getRevenueFromDB = async () =>{
@@ -79,5 +85,6 @@ const getRevenueFromDB = async () =>{
 export const OrderServices = {
     orderCreateIntoDB,
     getRevenueFromDB,
-    getAllOrderFromDB
+    getAllOrderFromDB,
+    getSingleOrderFromDB
 }
