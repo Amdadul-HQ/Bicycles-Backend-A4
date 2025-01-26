@@ -6,6 +6,15 @@ const userSignUpInToDB = async(payload:IUser)=>{
     return result;
 }
 
+const getMe = async (userId: string, role: string) => {
+    const user = await User.findOne({ _id: userId });
+    if(user?.role === role ){
+        return user;
+    }
+    return null
+  };
+
 export const UserService = {
-    userSignUpInToDB
+    userSignUpInToDB,
+    getMe
 }

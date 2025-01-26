@@ -1,5 +1,5 @@
 import { model, Schema } from "mongoose";
-import { IOrder } from "./order.interface";
+import { IOrder, IOrderModel } from "./order.interface";
 
 const orderSchema = new Schema<IOrder>(
   {
@@ -10,5 +10,11 @@ const orderSchema = new Schema<IOrder>(
   },
   { timestamps: true })
 
+orderSchema.statics.isOrderExists = async function (
+  id: string,
+) {
+  const existOrder = await Order.findById(id);
+  return existOrder;
+};
 
-export const Order = model<IOrder>('Order',orderSchema)
+export const Order = model<IOrder,IOrderModel>('Order',orderSchema)

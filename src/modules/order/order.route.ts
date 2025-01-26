@@ -21,6 +21,9 @@ router.get('/',
 //get single order
 router.get('/:orderId',OrderController.getSingleOrder) 
 
+// get user orders
+router.get()
+
 // Order Revenue
 router.get('/revenue',OrderController.getRevenue)
 

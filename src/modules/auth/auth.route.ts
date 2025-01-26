@@ -4,6 +4,8 @@ import { AuthController } from "./auth.controller";
 import validateRequest from "../../app/middleware/validateRequest";
 import { userValidation } from "../user/user.validate";
 import { UserController } from "../user/user.controller";
+import auth from "../../app/middleware/auth";
+import { USER_ROLE } from "../user/user.constant";
 
 const AuthRoute = express.Router();
 
@@ -14,6 +16,15 @@ AuthRoute.post('/signup',validateRequest(userValidation.createUserValidationSche
 // Login 
 AuthRoute.post('/login',validateRequest(AuthValidation.loginValidationSchema),AuthController.loginUser);
 
+
+AuthRoute.get(
+    '/me',
+    auth(
+      USER_ROLE.customer,
+      USER_ROLE.admin
+    ),
+    UserControllers.getMe,
+  );
 
 
 export const AuthRoutes = AuthRoute;

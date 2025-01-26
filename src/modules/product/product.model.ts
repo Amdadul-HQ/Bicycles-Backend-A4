@@ -25,7 +25,6 @@ productSchema.statics.isProductExists = async function (
   id: string,
 ) {
   const existProduct = await Product.findById({ _id: id, isDeleted: false });
-  console.log(existProduct,'model');
   return existProduct;
 };
 

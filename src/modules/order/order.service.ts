@@ -39,7 +39,6 @@ const orderCreateIntoDB = async (order: IOrder) => {
     if(!updateProduct){
       throw new AppError(httpStatus.BAD_GATEWAY,'Failed to Place Order')
     }
-    console.log(order,'order');
     const result = await Order.create([order],{session});
 
     await session.commitTransaction();
@@ -61,6 +60,11 @@ const getAllOrderFromDB = async () => {
 
 // get single order
 const getSingleOrderFromDB = async(id:string)=>{
+
+  const order = await Order.isOrderExists(id);
+  if(!order){
+    throw new AppError(httpStatus.NOT_FOUND, 'Order Not Found!!');
+  }
   const result = Order.findById(id).populate('product')
   return result;
 }
