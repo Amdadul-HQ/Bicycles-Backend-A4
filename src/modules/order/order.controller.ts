@@ -39,6 +39,19 @@ const getSingleOrder = catchAsync(async(req,res)=>{
   });
 })
 
+// get user order
+const getUserOrder = catchAsync(async(req,res)=>{
+  const email = req?.user?.email 
+  console.log(email);
+  const result = await OrderServices.getUserOrderFromDB(email);
+  sendResponse(res,{
+    statusCode:httpStatus.OK,
+    success:true,
+    message:'User Orders',
+    data:result
+  })
+})
+
 // Get Total Revenue;
 
 const getRevenue = async(req:Request,res:Response) =>{
@@ -67,5 +80,6 @@ export const OrderController = {
     createOrder,
     getRevenue,
     getAllOrder,
-    getSingleOrder
+    getSingleOrder,
+    getUserOrder
 }

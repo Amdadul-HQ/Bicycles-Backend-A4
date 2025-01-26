@@ -69,6 +69,12 @@ const getSingleOrderFromDB = async(id:string)=>{
   return result;
 }
 
+// get user order 
+const getUserOrderFromDB = async(email:string)=>{
+  const result = await Order.find({email});
+  return result;
+}
+
 // get revenue
 
 const getRevenueFromDB = async () =>{
@@ -90,5 +96,6 @@ export const OrderServices = {
     orderCreateIntoDB,
     getRevenueFromDB,
     getAllOrderFromDB,
-    getSingleOrderFromDB
+    getSingleOrderFromDB,
+    getUserOrderFromDB
 }

@@ -16,14 +16,14 @@ AuthRoute.post('/signup',validateRequest(userValidation.createUserValidationSche
 // Login 
 AuthRoute.post('/login',validateRequest(AuthValidation.loginValidationSchema),AuthController.loginUser);
 
-
+// my info
 AuthRoute.get(
     '/me',
     auth(
       USER_ROLE.customer,
       USER_ROLE.admin
     ),
-    UserControllers.getMe,
+    UserController.getMe,
   );
 
 

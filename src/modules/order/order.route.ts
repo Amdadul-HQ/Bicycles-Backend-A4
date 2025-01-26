@@ -22,7 +22,7 @@ router.get('/',
 router.get('/:orderId',OrderController.getSingleOrder) 
 
 // get user orders
-router.get()
+router.get('/user/order',auth(USER_ROLE.customer,USER_ROLE.admin),OrderController.getUserOrder)
 
 // Order Revenue
 router.get('/revenue',OrderController.getRevenue)
