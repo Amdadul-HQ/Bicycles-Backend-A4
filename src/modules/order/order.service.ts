@@ -51,8 +51,13 @@ const orderCreateIntoDB = async (order: IOrder) => {
     await session.endSession();
     throw new Error(err);
   }
-
 };
+
+// get all the order
+const getAllOrderFromDB = async () => {
+  const result = await Order.find();
+  return result
+}
 
 // get revenue
 
@@ -73,5 +78,6 @@ const getRevenueFromDB = async () =>{
 
 export const OrderServices = {
     orderCreateIntoDB,
-    getRevenueFromDB
+    getRevenueFromDB,
+    getAllOrderFromDB
 }

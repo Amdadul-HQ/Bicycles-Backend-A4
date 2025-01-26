@@ -9,9 +9,14 @@ const router = express.Router();
 
 // Order place
 router.post('/place-order',
-    // auth(USER_ROLE.customer),
+    auth(USER_ROLE.customer),
     validateRequest(orderSchema),
     OrderController.createOrder);
+
+// get al the order info 
+router.get('/',
+    // auth(USER_ROLE.admin),
+    OrderController.getAllOrder)
 
 // Order Revenue
 router.get('/revenue',OrderController.getRevenue)

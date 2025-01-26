@@ -17,6 +17,17 @@ const createOrder = catchAsync(async (req, res) => {
     });
 });
 
+// get all the order
+const getAllOrder = catchAsync(async(req,res)=>{
+  const result = await OrderServices.getAllOrderFromDB()
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'All orders',
+    data: result,
+  });
+})
+
 // Get Total Revenue;
 
 const getRevenue = async(req:Request,res:Response) =>{
@@ -43,5 +54,6 @@ const getRevenue = async(req:Request,res:Response) =>{
 
 export const OrderController = {
     createOrder,
-    getRevenue
+    getRevenue,
+    getAllOrder
 }
