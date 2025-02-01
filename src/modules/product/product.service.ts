@@ -17,7 +17,9 @@ const productCreateIntoDB = async (file:any,product: IProduct)=>{
     const { secure_url } = await sendImageToCloudinary(imageName, path);
 
     product.image = secure_url as string;
-    const result = (await Product.create(product)).toObject();
+    console.log(product,'f');
+    const result = await Product.create(product);
+    console.log(result,'hello');
     return result;
   }
 }
@@ -55,11 +57,12 @@ const getSingleProductFromDB = async(id:string) =>{
 const updateProductIntoDB = async(id:string,product:IProduct,file:any)=>{
 
   const isProductExist = await Product.isProductExists(id);
-
+  // console.log(isProductExist);
   if(!isProductExist){
     throw new AppError(httpStatus.NOT_FOUND, 'Product Not Found!!');
   }
 
+  console.log(file);
   if(file){
     const path = file?.path;
 
@@ -70,7 +73,10 @@ const updateProductIntoDB = async(id:string,product:IProduct,file:any)=>{
     product.image = secure_url as string;
   }
 
+  console.log(product,'update');
+
   const result = await Product.findByIdAndUpdate(id, {...product}, { new: true });
+  // console.log(result,'result');
   return result;
 }
 

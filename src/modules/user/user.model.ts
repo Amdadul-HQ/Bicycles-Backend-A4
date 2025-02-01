@@ -55,8 +55,8 @@ const userSchema = new Schema<IUser, IUserModel>(
     next();
   });
   
-  userSchema.statics.isUserExists = async function (email: string) {
-    return await User.findOne({ email }).select('+password +role');
+  userSchema.statics.isUserExists = async function (id: string) {
+    return await User.findById( id ).select('+password +role');
   };
   
   userSchema.statics.isPasswordMatched = async function (

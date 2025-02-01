@@ -16,6 +16,13 @@ AuthRoute.post('/signup',validateRequest(userValidation.createUserValidationSche
 // Login 
 AuthRoute.post('/login',validateRequest(AuthValidation.loginValidationSchema),AuthController.loginUser);
 
+
+AuthRoute.post(
+  '/refresh-token',
+  validateRequest(AuthValidation.refreshTokenValidation),
+  AuthController.refreshToken,
+);
+
 // my info
 AuthRoute.get(
     '/me',

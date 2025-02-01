@@ -1,5 +1,4 @@
 import httpStatus from "http-status";
-import { Request, Response } from 'express';
 import { ProductServices } from './product.service';
 import sendResponse from '../../app/utils/sendResponse';
 import { catchAsync } from "../../app/utils/catchAsync";
@@ -8,6 +7,8 @@ import { catchAsync } from "../../app/utils/catchAsync";
 const createProduct = catchAsync(async (req, res) => {
 
       const product = req.body;
+      // console.log(product);
+      // console.log(req.file,'helloafasdf');
       
       const result = await ProductServices.productCreateIntoDB(req.file,product);
 
@@ -49,7 +50,7 @@ const updateProduct = catchAsync(async (req, res) => {
     const { productId } = req.params;
     const updateData = req.body;
     
-    const result = await ProductServices.updateProductIntoDB(productId,updateData,req.file);
+    const result = await ProductServices.updateProductIntoDB(productId,updateData,req?.file);
 
     sendResponse(res, {
       statusCode: httpStatus.OK,

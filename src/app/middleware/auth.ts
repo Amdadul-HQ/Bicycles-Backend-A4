@@ -14,8 +14,7 @@ const auth = (...requiredRoles:TUserRole[]) => {
 
       
       // validation
-      const token = req?.headers?.authorization?.split(' ')[1];
-
+      const token = req?.headers?.authorization;
       // is token sended
       if(!token){
           throw new AppError(httpStatus.UNAUTHORIZED,'You are not authorized');
@@ -30,10 +29,10 @@ const auth = (...requiredRoles:TUserRole[]) => {
         const {email,role,userId} = decoded
 
         if(!email || !role || !userId){
-            throw new AppError(httpStatus.FORBIDDEN,"Pleasse Login Again")
+            throw new AppError(httpStatus.FORBIDDEN,"Please Login Again")
         }
 
-        const isUserExists = await User.isUserExists(email)
+        const isUserExists = await User.isUserExists(userId)
     
         if(!isUserExists){
             throw new AppError(httpStatus.NOT_FOUND,"This user is not found!")

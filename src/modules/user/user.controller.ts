@@ -28,7 +28,33 @@ const getMe = catchAsync(async (req, res) => {
   });
 
 
+const getAllUsers = catchAsync(async(req,res)=>{
+  const result = await UserService.getAllUsersFromDB(req.query);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'User are retrieved successfully',
+    meta: result.meta,
+    data: result.result,
+  });
+})
+
+const deleteUser = catchAsync(async(req,res)=>{
+  const { id } = req.params;
+  const result = await UserService.deleteUserFromDB(id);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'User is deleted successfully',
+    data: result,
+  });
+})
+
+
 export const UserController = {
     userSingUp,
-    getMe
+    getMe,
+    getAllUsers,
+    deleteUser
 }
