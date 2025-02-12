@@ -4,6 +4,9 @@ import { Product } from "../product/product.model";
 import { IOrder } from "./order.interface";
 import { Order } from "./order.model";
 import httpStatus from 'http-status';
+import Stripe from 'stripe';
+import config from "../../app/config";
+
 
 const orderCreateIntoDB = async (order: IOrder) => {
   
@@ -83,6 +86,23 @@ const getAllOrderFromDB = async () => {
   return result
 }
 
+// payment intent
+const paymentIntent = async (totalPrice:number) => {
+  const stripe = new Stripe(config.stripe_secret_key as string, {
+    apiVersion: '2024-12-18.acacia',// Use the latest API version
+  });
+  if(totalPrice < 1){
+    throw new AppError(httpStatus.NOT_FOUND, 'Price low!!');
+  }
+  const paymentIntent = await stripe.paymentIntents.create({
+    amount: totalPrice, // Convert to cents
+    currency: 'usd',
+  });
+
+  return paymentIntent;
+
+}
+
 // get single order
 const getSingleOrderFromDB = async(id:string)=>{
 
@@ -136,5 +156,6 @@ export const OrderServices = {
     getAllOrderFromDB,
     getSingleOrderFromDB,
     getUserOrderFromDB,
-    deleteOrderFromDB
+    deleteOrderFromDB,
+    paymentIntent
 }

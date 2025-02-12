@@ -66,6 +66,21 @@ const deleteOrder = catchAsync(async(req,res)=>{
   }
 })
 
+// payment intent
+const paymentIntent = catchAsync(async(req,res)=>{
+  const price :number = req.body.amount;
+  console.log(req.body);
+  const priceInCent = price*100
+
+  const result = await OrderServices.paymentIntent(priceInCent)
+  sendResponse(res,{
+    statusCode:httpStatus.OK,
+    success:true,
+    message:'Create Payment Indent',
+    data:result
+  })
+})
+
 // order update
 // const orderUpdate = catchAsync(async(req,res)=>{
 //   // const 
@@ -101,5 +116,6 @@ export const OrderController = {
     getAllOrder,
     getSingleOrder,
     getUserOrder,
-    deleteOrder
+    deleteOrder,
+    paymentIntent
 }

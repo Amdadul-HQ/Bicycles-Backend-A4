@@ -7,6 +7,10 @@ import { orderSchema } from './order.validation';
 
 const router = express.Router();
 
+router.post('/create-payment-intent',
+    // auth(USER_ROLE.customer),
+    OrderController.paymentIntent)
+
 // Order place
 router.post('/place-order',
     // auth(USER_ROLE.customer),
