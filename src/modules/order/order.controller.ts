@@ -88,25 +88,15 @@ const paymentIntent = catchAsync(async(req,res)=>{
 
 // Get Total Revenue;
 
-const getRevenue = async(req:Request,res:Response) =>{
-    try{
+const getRevenue = catchAsync(async(req:Request,res:Response) =>{
         const totalRevenue = await OrderServices.getRevenueFromDB()
-        res.status(200).json({
-          message: 'Revenue calculated successfully',
-          success: true,
-          data: {
-            totalRevenue,
-          },
-        });
-    }
-    catch(error:unknown){
-        res.status(401).send({
-          message:'something went worng',
-          success :false,
-          data:error
+        sendResponse(res,{
+          statusCode:httpStatus.OK,
+          success:true,
+          message:'Total Revenue',
+          data:totalRevenue
         })
-    }
-}
+})
 
 
 

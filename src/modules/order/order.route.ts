@@ -19,7 +19,7 @@ router.post('/place-order',
 
 // get all the order info 
 router.get('/',
-    // auth(USER_ROLE.admin),
+    auth(USER_ROLE.admin),
     OrderController.getAllOrder)
 
 //get single order
@@ -37,7 +37,9 @@ router.delete('/user/:orderId',
     OrderController.deleteOrder)
 
 // Order Revenue
-router.get('/revenue',OrderController.getRevenue)
+router.get('/total/revenue',
+    // auth(USER_ROLE.admin),
+    OrderController.getRevenue)
 
 
 
