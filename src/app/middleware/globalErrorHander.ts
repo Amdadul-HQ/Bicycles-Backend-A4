@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+ 
 /* eslint-disable no-unused-vars */
 
 import { ErrorRequestHandler } from "express";
@@ -11,7 +11,7 @@ import handleCastError from "../errors/handleCastError";
 import handleDuplicateError from "../errors/handleDuplicateError";
 import { AppError } from "../errors/AppError";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+ 
 const globalErrorHander :ErrorRequestHandler = (
   err,
   req,

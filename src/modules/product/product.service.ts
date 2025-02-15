@@ -54,6 +54,7 @@ const getSingleProductFromDB = async(id:string) =>{
 }
 
 // Update Single Product
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const updateProductIntoDB = async(id:string,product:IProduct,file:any)=>{
 
   const isProductExist = await Product.isProductExists(id);
@@ -62,7 +63,6 @@ const updateProductIntoDB = async(id:string,product:IProduct,file:any)=>{
     throw new AppError(httpStatus.NOT_FOUND, 'Product Not Found!!');
   }
 
-  console.log(file);
   if(file){
     const path = file?.path;
 
