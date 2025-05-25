@@ -6,32 +6,41 @@ import config from "../../app/config";
 const userSchema = new Schema<IUser, IUserModel>(
     {
       name: {
-        type: String,
-        required: [true, 'Name is required'],
-        trim: true,
-      },
-      email: {
-        type: String,
-        required: [true, 'Email is required'],
-        trim: true,
-        unique: true,
-      },
-      password: {
-        type: String,
-        required: [true, 'Passowrd is required'],
-        select: 0,
-      },
-      role: {
-        type: String,
-        enum: ['admin', 'customer'],
-        select: 0,
-        default:'customer'
-      },
-      isBlocked: {
-        type: Boolean,
-        default: false,
-        select: 0,
-      },
+      type: String,
+      required: [true, 'Name is required'],
+      trim: true,
+    },
+    email: {
+      type: String,
+      required: [true, 'Email is required'],
+      trim: true,
+      unique: true,
+    },
+    password: {
+      type: String,
+      required: [true, 'Password is required'],
+      select: false,
+    },
+    role: {
+      type: String,
+      enum: ['admin', 'customer','vendor'],
+      default: 'customer',
+      select: false,
+    },
+    isBlocked: {
+      type: Boolean,
+      default: false,
+      select: false,
+    },
+    hasStore: {
+      type: Boolean,
+      default: false,
+    },
+    store: {
+      type: Schema.Types.ObjectId,
+      ref: 'Store',
+      default: null,
+    },
     },
     {
       timestamps: true,

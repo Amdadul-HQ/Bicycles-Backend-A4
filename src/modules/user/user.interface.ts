@@ -6,8 +6,10 @@ export interface IUser {
   name: string;
   email: string;
   password: string;
-  role: 'admin' | 'customer';
+  role: 'admin' | 'customer' | 'vendor';
   isBlocked: boolean;
+  hasStore?: boolean; // Optional flag
+  store?:Types.ObjectId
 }
 
 export interface IUserModel extends Model<IUser> {
