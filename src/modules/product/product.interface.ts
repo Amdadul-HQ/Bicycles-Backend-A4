@@ -1,12 +1,26 @@
 /* eslint-disable no-unused-vars */
 import { Model, Types } from "mongoose";
 
+type BicycleCategory =
+  | "Mountain"
+  | "Road"
+  | "Hybrid"
+  | "Gravel"
+  | "Electric"
+  | "Cruiser"
+  | "BMX"
+  | "Folding"
+  | "City"
+  | "Touring"
+  | "Fat Tire"
+  | "Fixie";
+
 export interface IProduct {
   name: string;
   image: string;
   brand: string;
   price: number;
-  category: "Mountain" | "Road" | "Hybrid" | "BMX" | "Electric";
+  category: BicycleCategory;
   description: string;
   quantity: number;
   inStock: boolean;

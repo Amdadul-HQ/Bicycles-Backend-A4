@@ -38,6 +38,12 @@ const storeSchema =  new Schema<IStore>(
         ref: 'Product', // 👈 Replace with your product model name if different
       },
     ],
+    orders: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Order', // 👈 Replace with your product model name if different
+      },
+    ],
     totalIncome:{
         type:Number,
         default:0

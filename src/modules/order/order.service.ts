@@ -48,10 +48,12 @@ const orderCreateIntoDB = async (order: IOrder) => {
     // ✅ Step 4: Update Store's Total Income
     const storeId = productDetails.store;
 
+
     const updatedStore = await Store.findByIdAndUpdate(
       storeId,
       {
         $inc: { totalIncome: totalPrice },
+        $push: { orders: createdOrder._id },
       },
       { new: true, session }
     );
