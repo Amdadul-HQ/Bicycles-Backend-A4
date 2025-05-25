@@ -1,8 +1,9 @@
-export const Role = ['admin', 'customer'];
+export const Role = ['admin', 'customer','vendor'];
 
 export const USER_ROLE = {
     customer:'customer',
     admin: 'admin',
+    vendor:'vendor'
 } as const;
 
 export const userSearchableFields = [
