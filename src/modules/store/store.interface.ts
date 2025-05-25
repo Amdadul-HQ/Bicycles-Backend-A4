@@ -6,7 +6,6 @@ export interface IStore {
   shopAddress: string,
   phone: string,
   storeProducts: Types.ObjectId[];
+  status:"active" | "pending" | "blocked",
   profileImage: string,
-  createdAt: Date,
-  updatedAt: Date
 }

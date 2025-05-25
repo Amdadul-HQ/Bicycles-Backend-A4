@@ -1,9 +1,10 @@
 /* eslint-disable no-unused-vars */
-import { Model } from "mongoose";
+import { Model, Types } from "mongoose";
 
 export interface IOrder {
-  email: string;
-  product: string;
+  user: Types.ObjectId; // reference to User
+  product: Types.ObjectId; // reference to Product
+  store: Types.ObjectId; // reference to Store (optional but useful for vendor tracking)
   quantity: number;
   totalPrice: number;
   status: boolean;

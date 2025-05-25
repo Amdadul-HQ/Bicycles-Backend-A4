@@ -17,7 +17,7 @@ const productCreateIntoDB = async (file:any,product: IProduct)=>{
     const { secure_url } = await sendImageToCloudinary(imageName, path);
 
     product.image = secure_url as string;
-    console.log(product,'f');
+    
     const result = await Product.create(product);
     console.log(result,'hello');
     return result;

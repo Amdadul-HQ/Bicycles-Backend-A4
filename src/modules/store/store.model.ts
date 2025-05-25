@@ -26,6 +26,12 @@ const storeSchema =  new Schema<IStore>(
       type: String,
       default: "", // optional: can set a default image URL
     },
+    status:{
+      type: String,
+      enum: ['active', 'pending','blocked'],
+      default: 'pending',
+      select: false,
+    },
     storeProducts: [
       {
         type: Schema.Types.ObjectId,
