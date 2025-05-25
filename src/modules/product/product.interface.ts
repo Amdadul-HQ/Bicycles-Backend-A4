@@ -15,5 +15,5 @@ export interface IProduct {
 }
 
 export interface IProductModel extends Model<IProduct> {
-    isProductExists(id: string): Promise<IProduct | null>;
+    isProductExists(id: Types.ObjectId): Promise<IProduct | null>;
 }

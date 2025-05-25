@@ -17,10 +17,6 @@ router.post('/place-order',
     validateRequest(orderSchema),
     OrderController.createOrder);
 
-// get all the order info 
-router.get('/',
-    auth(USER_ROLE.admin),
-    OrderController.getAllOrder)
 
 //get single order
 router.get('/:orderId',OrderController.getSingleOrder);

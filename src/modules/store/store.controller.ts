@@ -29,7 +29,8 @@ const applyForStore = catchAsync(async (req: Request, res: Response) => {
       phone,
       profileImage: secure_url as string,
       storeProducts: [],
-      status: "pending"
+      status: "pending",
+      totalIncome:0
   }
 
   const newStore = await StoreService.createStore(storeData); // casting to IStore

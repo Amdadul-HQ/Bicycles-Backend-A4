@@ -54,8 +54,8 @@ const getUserOrder = catchAsync(async(req,res)=>{
 // delete order 
 const deleteOrder = catchAsync(async(req,res)=>{
   const orderid = req.params.orderId;
-  const email = req?.user?.email
-  const result = await OrderServices.deleteOrderFromDB(orderid,email)
+  const id = req?.user?.id
+  const result = await OrderServices.deleteOrderFromDB(orderid,id)
   if(result){
     sendResponse(res,{
       statusCode:httpStatus.OK,

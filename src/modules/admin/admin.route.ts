@@ -2,8 +2,15 @@ import express  from 'express';
 import { AdminController } from './admin.controller';
 import auth from '../../app/middleware/auth';
 import { USER_ROLE } from '../user/user.constant';
+import { OrderController } from '../order/order.controller';
 
 const router = express.Router()
+
+// get all the order info 
+router.get('/all-order',
+    auth(USER_ROLE.admin),
+    OrderController.getAllOrder)
+
 
 router.get('/',AdminController.getAllStores)
 

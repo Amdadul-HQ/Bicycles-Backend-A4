@@ -38,6 +38,10 @@ const storeSchema =  new Schema<IStore>(
         ref: 'Product', // 👈 Replace with your product model name if different
       },
     ],
+    totalIncome:{
+        type:Number,
+        default:0
+    }
 
   },
   { timestamps: true },

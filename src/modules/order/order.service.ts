@@ -1,4 +1,5 @@
-import mongoose from "mongoose";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import mongoose, { Types } from "mongoose";
 import { AppError } from "../../app/errors/AppError";
 import { Product } from "../product/product.model";
 import { IOrder } from "./order.interface";
@@ -6,77 +7,67 @@ import { Order } from "./order.model";
 import httpStatus from 'http-status';
 import Stripe from 'stripe';
 import config from "../../app/config";
+import { Store } from "../store/store.model";
 
 
 const orderCreateIntoDB = async (order: IOrder) => {
-  
-  const {product,quantity} = order
+  const { product, quantity, totalPrice } = order;
 
   const session = await mongoose.startSession();
-  try{
+  try {
     session.startTransaction();
 
+    // ✅ Step 1: Get Product Details
+    const productDetails = await Product.isProductExists(product);
 
-    const productDetails = await Product.isProductExists(product)
-
-
-    if(!productDetails){
+    if (!productDetails) {
       throw new AppError(httpStatus.NOT_FOUND, 'Product Not Found!!');
     }
-  
+
     if (productDetails.quantity < quantity) {
-      throw new AppError(httpStatus.NOT_FOUND, 'Product Out of Stock!!');
+      throw new AppError(httpStatus.BAD_REQUEST, 'Product Out of Stock!!');
     }
-  
-    productDetails.quantity -= quantity;
-  
-    if (productDetails.quantity === 0) {
-        productDetails.inStock = false;
-    }
-    
-    const updateProduct = await Product.findByIdAndUpdate(
-      product, 
-      { $inc: { quantity: -quantity }, inStock: productDetails.quantity > quantity }, 
-      { session }
+
+    // ✅ Step 2: Update Product Stock
+    const updatedProduct = await Product.findByIdAndUpdate(
+      product,
+      {
+        $inc: { quantity: -quantity },
+        inStock: productDetails.quantity - quantity > 0,
+      },
+      { new: true, session }
     );
 
-    // const stripeSession = await stripe.checkout.sessions.create({
-    //   payment_method_types: ['card'],
-    //   line_items: [
-    //     {
-    //       price_data: {
-    //         currency: 'usd',
-    //         product_data: {
-    //           name: productDetails.name,
-    //           description: `Quantity of ${quantity}`,
-    //         },
-    //         unit_amount: order.totalPrice * 100, // Convert to cents
-    //       },
-    //       quantity: 1,
-    //     },
-    //   ],
-    //   mode: 'payment',
-    //   success_url: `${process.env.FRONTEND_URL}/success?session_id={CHECKOUT_SESSION_ID}`,
-    //   cancel_url: `${process.env.FRONTEND_URL}/cancel`,
-    //   // metadata: {
-    //   //   orderId: order.,
-    //   // },
-    // });
-    // console.log(stripeSession);
-
-    if(!updateProduct){
-      throw new AppError(httpStatus.BAD_GATEWAY,'Failed to Place Order')
+    if (!updatedProduct) {
+      throw new AppError(httpStatus.BAD_GATEWAY, 'Failed to update product stock');
     }
-    const result = await Order.create([order],{session});
+
+    // ✅ Step 3: Create the Order
+    const [createdOrder] = await Order.create([order], { session });
+
+    // ✅ Step 4: Update Store's Total Income
+    const storeId = productDetails.store;
+
+    const updatedStore = await Store.findByIdAndUpdate(
+      storeId,
+      {
+        $inc: { totalIncome: totalPrice },
+      },
+      { new: true, session }
+    );
+
+    if (!updatedStore) {
+      throw new AppError(httpStatus.NOT_FOUND, 'Associated store not found!');
+    }
 
     await session.commitTransaction();
-    await session.endSession();
-    return result
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  }catch (err: any) {
+    session.endSession();
+
+    return createdOrder;
+  } catch (err: any) {
     await session.abortTransaction();
-    await session.endSession();
-    throw new Error(err);
+    session.endSession();
+    throw new AppError(httpStatus.INTERNAL_SERVER_ERROR, err.message || 'Order failed');
   }
 };
 
@@ -121,12 +112,12 @@ const getUserOrderFromDB = async(email:string)=>{
 }
 
 // delete order 
-const deleteOrderFromDB = async(id:string,email:string)=>{
+const deleteOrderFromDB = async(id:string,userId:Types.ObjectId)=>{
   const isOrderExists = await Order.isOrderExists(id);
   if(!isOrderExists){
     throw new AppError(httpStatus.NOT_FOUND, 'Order Not Found!!');
   }
-  if(isOrderExists?.email !== email){
+  if(isOrderExists?.user !== userId){
     throw new AppError(httpStatus.UNAUTHORIZED, 'UnAuthorized!!');
   }
   const result = await Order.findByIdAndDelete(id)

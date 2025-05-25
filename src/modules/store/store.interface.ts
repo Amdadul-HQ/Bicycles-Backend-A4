@@ -8,4 +8,5 @@ export interface IStore {
   storeProducts: Types.ObjectId[];
   status:"active" | "pending" | "blocked",
   profileImage: string,
+  totalIncome:number
 }
