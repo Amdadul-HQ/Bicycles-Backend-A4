@@ -41,8 +41,9 @@ const getSingleOrder = catchAsync(async(req,res)=>{
 
 // get user order
 const getUserOrder = catchAsync(async(req,res)=>{
-  const email = req?.user?.email 
-  const result = await OrderServices.getUserOrderFromDB(email);
+  const userId = req?.user?.id
+  console.log(userId)
+  const result = await OrderServices.getUserOrderFromDB(userId);
   sendResponse(res,{
     statusCode:httpStatus.OK,
     success:true,

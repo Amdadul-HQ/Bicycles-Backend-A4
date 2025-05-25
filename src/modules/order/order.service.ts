@@ -108,8 +108,8 @@ const getSingleOrderFromDB = async(id:string)=>{
 }
 
 // get user order 
-const getUserOrderFromDB = async(email:string)=>{
-  const result = await Order.find({email});
+const getUserOrderFromDB = async(userId:string)=>{
+  const result = await Order.find({user:userId});
   return result;
 }
 

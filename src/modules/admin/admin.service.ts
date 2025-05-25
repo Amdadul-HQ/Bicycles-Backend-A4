@@ -7,26 +7,30 @@ import { userSearchableFields } from "../user/user.constant";
 import QueryBuilder from "../../app/builder/QueryBuilder";
 
 const getAllStores = async() => {
-    const stores = await Store.find().populate("user", "name email role");
+    const stores = await Store.find()
+    .populate("user", "name email role")
+    .populate("storeProducts") // you can specify fields if needed: .populate("storeProducts", "title price")
+    .populate("orders"); // likewise, you can limit fields if needed: .populate("orders", "status total");
     return stores;
 }
 
-const approveStore = async (storeId: string) => {
+const approveStore = async (storeId: string,status:"pending" | "blocked" | "active") => {
   const session = await mongoose.startSession();
   session.startTransaction();
 
   try {
     const store = await Store.findById(storeId).session(session);
+    console.log(store,'asdhfasdfas')
     if (!store) {
       throw new AppError(httpStatus.NOT_FOUND, "Store not found");
     }
 
-    if (store.status === "active") {
-      throw new AppError(httpStatus.BAD_REQUEST, "Store already approved");
+    if (store.status === status) {
+      throw new AppError(httpStatus.BAD_REQUEST, "Store already updated");
     }
 
     // ✅ Update store status
-    store.status = "active";
+    store.status = status;
     await store.save({ session });
 
     // ✅ Update user role to 'vendor'

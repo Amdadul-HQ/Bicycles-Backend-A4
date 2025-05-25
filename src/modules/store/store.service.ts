@@ -4,12 +4,13 @@ import { Store } from "./store.model";
 import httpStatus from 'http-status';
 
 const createStore = async (storeData: IStore): Promise<IStore> => {
+  console.log(storeData,'asdfasdfas')
   const existingStore = await Store.findOne({ user: storeData.user });
   if (existingStore) {
     throw new AppError(httpStatus.BAD_REQUEST,"User already has a store.");
   }
 
-  const newStore = await Store.create(storeData);
+  const newStore = (await Store.create(storeData));
   return newStore;
 };
 

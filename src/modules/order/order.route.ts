@@ -22,7 +22,7 @@ router.post('/place-order',
 router.get('/:orderId',OrderController.getSingleOrder);
 
 // get user orders
-router.get('/user/order',auth(USER_ROLE.customer,USER_ROLE.admin),OrderController.getUserOrder);
+router.get('/user/order',auth(USER_ROLE.customer,USER_ROLE.admin,USER_ROLE.vendor),OrderController.getUserOrder);
 
 // Order Update
 // router.patch('/user/:orderId',auth(USER_ROLE.customer),OrderController.)

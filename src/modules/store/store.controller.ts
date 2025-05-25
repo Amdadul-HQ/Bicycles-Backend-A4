@@ -9,6 +9,7 @@ import { AppError } from "../../app/errors/AppError";
 
 const applyForStore = catchAsync(async (req: Request, res: Response) => {
   const userId = req?.user?.id; 
+  console.log(userId)
   const { shopName, shopAddress, phone } = req.body;
 
   const path =req.file?.path as string;
@@ -33,6 +34,8 @@ const applyForStore = catchAsync(async (req: Request, res: Response) => {
       totalIncome:0,
       orders:[]
   }
+
+  console.log(storeData,'asdfasdfasdfas')
 
   const newStore = await StoreService.createStore(storeData); // casting to IStore
 

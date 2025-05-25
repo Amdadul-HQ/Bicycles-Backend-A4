@@ -16,7 +16,9 @@ const getAllStores = catchAsync(async (req: Request, res: Response) => {
 
 const approveStore = catchAsync(async (req: Request, res: Response) => {
     const { id } = req.params;
-    const result = await AdminService.approveStore(id);
+    const {status} = req.body
+    console.log(status)
+    const result = await AdminService.approveStore(id,status);
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,

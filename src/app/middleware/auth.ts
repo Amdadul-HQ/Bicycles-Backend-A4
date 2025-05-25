@@ -26,13 +26,13 @@ const auth = (...requiredRoles:TUserRole[]) => {
     ) as JwtPayload;
 
 
-        const {email,role,userId} = decoded
-
-        if(!email || !role || !userId){
+    const {email,role,id} = decoded
+      console.log(decoded)
+        if(!email || !role || !id){
             throw new AppError(httpStatus.FORBIDDEN,"Please Login Again")
         }
-
-        const isUserExists = await User.isUserExists(userId)
+        const isUserExists = await User.isUserExists(id)
+        console.log(isUserExists)
     
         if(!isUserExists){
             throw new AppError(httpStatus.NOT_FOUND,"This user is not found!")

@@ -14,6 +14,7 @@ router.post('/apply-for-store',
     upload.single('file'),
     (req:Request,res:Response,next:NextFunction)=>{
     req.body = JSON.parse(req.body.data);
+    console.log('heallo')
     next()
   },
   validateRequest(StoreValidationSchema.createStoreValidationSchema),

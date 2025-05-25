@@ -28,7 +28,7 @@ const loginUserInToDB = async (payload: ILoginUser) => {
   }
 
   const jwtPayload :JwtPayload = {
-    userId: isUserExists._id,
+    id: isUserExists._id,
     email:isUserExists.email,
     role: isUserExists.role,
   };

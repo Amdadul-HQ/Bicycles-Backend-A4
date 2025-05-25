@@ -12,9 +12,9 @@ router.get('/all-order',
     OrderController.getAllOrder)
 
 
-router.get('/',AdminController.getAllStores)
+router.get('/all-store',auth(USER_ROLE.admin),AdminController.getAllStores)
 
-router.patch('/:id',auth(USER_ROLE.admin),AdminController.approveStore)
+router.patch('/store/:id',auth(USER_ROLE.admin),AdminController.approveStore)
 
 router.get(
   '/',

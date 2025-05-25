@@ -15,9 +15,9 @@ const userSingUp = catchAsync(async(req,res)=>{
 })
 
 const getMe = catchAsync(async (req, res) => {
-    const { userId, role } = req.user as JwtPayload;
+    const { id, role } = req.user as JwtPayload;
     
-    const result = await UserService.getMe(userId, role);
+    const result = await UserService.getMe(id, role);
   
     sendResponse(res, {
       statusCode: httpStatus.OK,

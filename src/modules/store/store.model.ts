@@ -30,7 +30,7 @@ const storeSchema =  new Schema<IStore>(
       type: String,
       enum: ['active', 'pending','blocked'],
       default: 'pending',
-      select: false,
+      select: true,
     },
     storeProducts: [
       {
