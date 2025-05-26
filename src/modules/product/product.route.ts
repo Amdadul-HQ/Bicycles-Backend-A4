@@ -2,9 +2,9 @@ import express, { NextFunction, Request, Response } from "express";
 import { ProductController } from "./product.controller";
 import auth from "../../app/middleware/auth";
 import { USER_ROLE } from "../user/user.constant";
-import { upload } from "../../app/utils/sendImageTOCloudinary";
 import validateRequest from "../../app/middleware/validateRequest";
 import { productZodSchema } from "./product.validation";
+import { upload } from "../../app/config/multer-config";
 
 const router = express.Router();
 
@@ -22,11 +22,12 @@ router.post('/add-bicycle',
 // Get All Bicycles
 router.get('/',ProductController.getAllProduct);
 
+// get vendor product
+router.get('/vendor-products',auth(USER_ROLE.vendor),ProductController.getVendorProduct)
+
 // Get A Specific Bicycle
 router.get('/:id',ProductController.getSingleProduct)
 
-// get vendor product
-router.get('/vendor-products',auth(USER_ROLE.vendor),ProductController.getVendorProduct)
 
 
 // Update A Specific Bicycle

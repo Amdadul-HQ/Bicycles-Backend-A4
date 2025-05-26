@@ -1,10 +1,10 @@
 import express, { NextFunction, Request, Response } from "express";
 import auth from "../../app/middleware/auth";
 import { USER_ROLE } from "../user/user.constant";
-import { upload } from "../../app/utils/sendImageTOCloudinary";
 import validateRequest from "../../app/middleware/validateRequest";
 import { StoreValidationSchema } from "./store.validation";
 import { StoreController } from "./store.controller";
+import { upload } from "../../app/config/multer-config";
 
 const router = express.Router();
 

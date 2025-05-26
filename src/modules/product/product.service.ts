@@ -135,6 +135,7 @@ const deleteProductFromDB = async(id:Types.ObjectId) =>{
 
 const getVendorProductFromDB = async(userId:string,query:Record<string,unknown>) => {
   const user = await User.findById(userId)
+  console.log(user,'user')
   const getAllProductQuery = new QueryBuilder(
     Product.find({store:user?.store}),
     query,

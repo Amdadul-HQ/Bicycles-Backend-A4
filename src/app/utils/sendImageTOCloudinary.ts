@@ -1,13 +1,7 @@
 import { v2 as cloudinary } from 'cloudinary';
 import fs from 'fs';
-import multer from 'multer';
-import config from '../config';
 
- cloudinary.config({
-   cloud_name: config.cloud_name,
-   api_key: config.cloud_api_key,
-   api_secret: config.cloud_api_secret, // Click 'View API Keys' above to copy your API secret
- });
+
 
 export const sendImageToCloudinary = (imageName: string, path: string):Promise<Record<string,unknown>> => {
   return new Promise((resolve, reject) => {
@@ -34,14 +28,3 @@ export const sendImageToCloudinary = (imageName: string, path: string):Promise<R
   });
 };
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, process.cwd() + '/uploads/');
-  },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-    cb(null, file.fieldname + '-' + uniqueSuffix);
-  },
-});
-
-export const upload = multer({ storage: storage });
