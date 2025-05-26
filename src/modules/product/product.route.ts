@@ -23,7 +23,11 @@ router.post('/add-bicycle',
 router.get('/',ProductController.getAllProduct);
 
 // Get A Specific Bicycle
-router.get('/:productId',ProductController.getSingleProduct)
+router.get('/:id',ProductController.getSingleProduct)
+
+// get vendor product
+router.get('/vendor-products',auth(USER_ROLE.vendor),ProductController.getVendorProduct)
+
 
 // Update A Specific Bicycle
 router.patch('/:productId',

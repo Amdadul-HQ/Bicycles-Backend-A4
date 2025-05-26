@@ -3,13 +3,20 @@ import httpStatus from "http-status";
 import { ProductServices } from './product.service';
 import sendResponse from '../../app/utils/sendResponse';
 import { catchAsync } from "../../app/utils/catchAsync";
+import { AppError } from "../../app/errors/AppError";
 
 // Create a Product
 const createProduct = catchAsync(async (req, res) => {
 
       const product = req.body;
+
+      const userId = req?.user?.id
+
+      if(!userId){
+        throw new AppError(httpStatus.BAD_GATEWAY,"User Access Denied")
+      }
       
-      const result = await ProductServices.productCreateIntoDB(req.file,product);
+      const result = await ProductServices.productCreateIntoDB(req.file,product,userId);
 
       sendResponse(res,{
         success:true,
@@ -33,8 +40,8 @@ const getAllProduct = catchAsync(async(req,res) => {
 // Get A Specific Product
 const getSingleProduct = catchAsync(async(req,res) => {
 
-    const {productId} = req.params;
-    const result = await ProductServices.getSingleProductFromDB(productId as any);
+    const {id} = req.params;
+    const result = await ProductServices.getSingleProductFromDB(id as any);
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
@@ -76,10 +83,25 @@ const deleteProduct = catchAsync(async (req,res) =>{
   
 });
 
+const getVendorProduct = catchAsync(async(req,res) => {
+  const userId = req?.user?.id
+  if(!userId){
+    throw new AppError(httpStatus.BAD_REQUEST,"User Access Denied")
+  }
+  const result = await ProductServices.getVendorProductFromDB(userId,req.query);
+      sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'All Products Retrieve successfully',
+        data: result,
+      });
+})
+
 export const ProductController = {
     createProduct,
     getAllProduct,
     getSingleProduct,
     updateProduct,
-    deleteProduct
+    deleteProduct,
+    getVendorProduct
 }

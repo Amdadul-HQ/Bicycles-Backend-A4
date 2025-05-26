@@ -1,3 +1,4 @@
+import { AppError } from '../../app/errors/AppError';
 import { catchAsync } from '../../app/utils/catchAsync';
 import sendResponse from '../../app/utils/sendResponse';
 import { OrderServices } from './order.service';
@@ -7,8 +8,12 @@ import httpStatus from 'http-status';
 const createOrder = catchAsync(async (req, res) => {
 
     const order = req.body;
+    const userId = req?.user?.id
+  if(!userId){
+    throw new AppError(httpStatus.BAD_GATEWAY,"User Access Denied")
+  }
     
-    const result = await OrderServices.orderCreateIntoDB(order)
+    const result = await OrderServices.orderCreateIntoDB(order,userId)
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
@@ -28,6 +33,21 @@ const getAllOrder = catchAsync(async(req,res)=>{
   });
 })
 
+// get vendor the order
+const getVendorOrder = catchAsync(async(req,res)=>{
+  const userId = req?.user?.id
+  if(!userId){
+    throw new AppError(httpStatus.BAD_REQUEST,"User Access denied")
+  }
+  const result = await OrderServices.getVendorOrderFromDB(userId,req.query)
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Vendor orders',
+    data: result,
+  });
+})
+
 // get single order
 const getSingleOrder = catchAsync(async(req,res)=>{
   const result= await OrderServices.getSingleOrderFromDB(req.params.orderId);
@@ -42,8 +62,7 @@ const getSingleOrder = catchAsync(async(req,res)=>{
 // get user order
 const getUserOrder = catchAsync(async(req,res)=>{
   const userId = req?.user?.id
-  console.log(userId)
-  const result = await OrderServices.getUserOrderFromDB(userId);
+  const result = await OrderServices.getUserOrderFromDB(userId,req.query);
   sendResponse(res,{
     statusCode:httpStatus.OK,
     success:true,
@@ -70,7 +89,8 @@ const deleteOrder = catchAsync(async(req,res)=>{
 // payment intent
 const paymentIntent = catchAsync(async(req,res)=>{
   const price :number = req.body.amount;
-  console.log(req.body);
+  
+
   const priceInCent = price*100
 
   const result = await OrderServices.paymentIntent(priceInCent)
@@ -108,5 +128,6 @@ export const OrderController = {
     getSingleOrder,
     getUserOrder,
     deleteOrder,
-    paymentIntent
+    paymentIntent,
+    getVendorOrder
 }

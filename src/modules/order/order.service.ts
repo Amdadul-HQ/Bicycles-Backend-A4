@@ -8,14 +8,26 @@ import httpStatus from 'http-status';
 import Stripe from 'stripe';
 import config from "../../app/config";
 import { Store } from "../store/store.model";
+import { User } from "../user/user.model";
+import QueryBuilder from "../../app/builder/QueryBuilder";
+import { OrderSearchableFields } from "./order.constant";
 
 
-const orderCreateIntoDB = async (order: IOrder) => {
+const orderCreateIntoDB = async (order: IOrder,userId:string) => {
   const { product, quantity, totalPrice } = order;
 
   const session = await mongoose.startSession();
   try {
     session.startTransaction();
+
+    const user = await User.findById(userId)
+
+    if(!user){
+      throw new AppError(httpStatus.BAD_GATEWAY,"User Not Founded")
+    }
+
+    order.user = user._id
+
 
     // ✅ Step 1: Get Product Details
     const productDetails = await Product.isProductExists(product);
@@ -27,6 +39,10 @@ const orderCreateIntoDB = async (order: IOrder) => {
     if (productDetails.quantity < quantity) {
       throw new AppError(httpStatus.BAD_REQUEST, 'Product Out of Stock!!');
     }
+
+    order.store = productDetails.store
+    
+    order.status = true
 
     // ✅ Step 2: Update Product Stock
     const updatedProduct = await Product.findByIdAndUpdate(
@@ -79,6 +95,26 @@ const getAllOrderFromDB = async () => {
   return result
 }
 
+// get all the order
+const getVendorOrderFromDB = async (id:string,query:Record<string,unknown>) => {
+
+  const user = await User.findById(id)
+
+  const userOrder = new QueryBuilder(
+      Order.find({store:user?.store}).populate('product').populate('user'),
+      query,
+    )
+      .search(OrderSearchableFields)
+      .filter()
+      .sort()
+      .paginate()
+      .fields();
+  const result = await userOrder.modelQuery;
+
+  // const result = await Order.find({user:id});
+  return result
+}
+
 // payment intent
 const paymentIntent = async (totalPrice:number) => {
   const stripe = new Stripe(config.stripe_secret_key as string, {
@@ -108,8 +144,17 @@ const getSingleOrderFromDB = async(id:string)=>{
 }
 
 // get user order 
-const getUserOrderFromDB = async(userId:string)=>{
-  const result = await Order.find({user:userId});
+const getUserOrderFromDB = async(userId:string,query:Record<string,unknown>)=>{
+  const userOrder = new QueryBuilder(
+      Order.find({user:userId}).populate('product'),
+      query,
+    )
+      .search(OrderSearchableFields)
+      .filter()
+      .sort()
+      .paginate()
+      .fields();
+  const result = await userOrder.modelQuery;
   return result;
 }
 
@@ -150,5 +195,6 @@ export const OrderServices = {
     getSingleOrderFromDB,
     getUserOrderFromDB,
     deleteOrderFromDB,
-    paymentIntent
+    paymentIntent,
+    getVendorOrderFromDB
 }

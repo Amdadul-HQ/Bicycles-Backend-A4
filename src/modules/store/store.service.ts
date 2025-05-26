@@ -23,7 +23,7 @@ const getMyStore = async(id:string) => {
   }
   
   const store = await Store.findById(user?.store)
-  .populate("orders")
+  .populate("storeProducts")
   .populate("orders")
 
   return store;

@@ -1,0 +1,1 @@
+export const OrderSearchableFields = ['product.name','user.name','product.category','user.email']

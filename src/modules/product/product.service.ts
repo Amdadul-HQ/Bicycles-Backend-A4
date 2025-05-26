@@ -7,9 +7,10 @@ import { IProduct } from "./product.interface";
 import { Product } from "./product.model";
 import httpStatus from 'http-status';
 import { Store } from "../store/store.model";
+import { User } from "../user/user.model";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const productCreateIntoDB = async (file: any, product: IProduct) => {
+const productCreateIntoDB = async (file: any, product: IProduct,userId:string) => {
   const session = await mongoose.startSession();
   session.startTransaction();
 
@@ -19,6 +20,19 @@ const productCreateIntoDB = async (file: any, product: IProduct) => {
       const imageName = `${product.name}`;
       const { secure_url } = await sendImageToCloudinary(imageName, path);
       product.image = secure_url as string;
+    }
+    const user = await User.findById(userId);
+
+    if(!user){
+      throw new AppError(httpStatus.NOT_FOUND,"User Not Found")
+    }
+
+    if(!user.hasStore){
+      throw new AppError(httpStatus.NOT_EXTENDED,"User Don't Have Store")
+    }
+
+    if(user.hasStore && user.store){
+      product.store = user.store
     }
 
     // ✅ Step 1: Create product
@@ -74,7 +88,7 @@ const getSingleProductFromDB = async(id:Types.ObjectId) =>{
     if(!isProductExist){
       throw new AppError(httpStatus.NOT_FOUND, 'Product Not Found!!');
     }
-    const result = await Product.findById(id);
+    const result = await Product.findById(id).populate("store");
     return result
 }
 
@@ -118,10 +132,28 @@ const deleteProductFromDB = async(id:Types.ObjectId) =>{
   return result;
 }
 
+
+const getVendorProductFromDB = async(userId:string,query:Record<string,unknown>) => {
+  const user = await User.findById(userId)
+  const getAllProductQuery = new QueryBuilder(
+    Product.find({store:user?.store}),
+    query,
+  )
+    .search(ProductSearchableFields)
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
+
+  const result = await getAllProductQuery.modelQuery;
+  return result;
+}
+
 export const ProductServices = {
     productCreateIntoDB,
     getAllProductFromDB,
     getSingleProductFromDB,
     updateProductIntoDB,
-    deleteProductFromDB
+    deleteProductFromDB,
+    getVendorProductFromDB
 }

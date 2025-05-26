@@ -11,6 +11,10 @@ router.post('/create-payment-intent',
     auth(USER_ROLE.customer),
     OrderController.paymentIntent)
 
+// vender order
+router.get('/venodor', auth(USER_ROLE.vendor),
+    OrderController.getVendorOrder)
+
 // Order place
 router.post('/place-order',
     auth(USER_ROLE.customer),
@@ -22,7 +26,7 @@ router.post('/place-order',
 router.get('/:orderId',OrderController.getSingleOrder);
 
 // get user orders
-router.get('/user/order',auth(USER_ROLE.customer,USER_ROLE.admin,USER_ROLE.vendor),OrderController.getUserOrder);
+router.get('/user/order',auth(USER_ROLE.customer),OrderController.getUserOrder);
 
 // Order Update
 // router.patch('/user/:orderId',auth(USER_ROLE.customer),OrderController.)
@@ -34,7 +38,7 @@ router.delete('/user/:orderId',
 
 // Order Revenue
 router.get('/total/revenue',
-    // auth(USER_ROLE.admin),
+    auth(USER_ROLE.admin),
     OrderController.getRevenue)
 
 
