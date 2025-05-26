@@ -14,10 +14,25 @@ router.post('/apply-for-store',
     upload.single('file'),
     (req:Request,res:Response,next:NextFunction)=>{
     req.body = JSON.parse(req.body.data);
-    console.log('heallo')
     next()
   },
   validateRequest(StoreValidationSchema.createStoreValidationSchema),
   StoreController.applyForStore);
+
+router.get('/my-store',
+  auth(USER_ROLE.vendor),
+  StoreController.getMyStore
+)
+
+router.patch('/update-store/:id',
+      auth(USER_ROLE.vendor),
+      upload.single('file'),
+      (req:Request,res:Response,next:NextFunction)=>{
+      req.body = JSON.parse(req.body.data);
+      next()
+  },
+  validateRequest(StoreValidationSchema.updateStoreValidationScham),
+  StoreController.updateStore
+)
 
 export const StoreRoutes = router

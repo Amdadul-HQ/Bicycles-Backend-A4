@@ -22,7 +22,24 @@ const createStoreValidationSchema = z.object({
   }),
 });
 
+const updateStoreValidationScham = z.object({
+  body:z.object({
+    shopName: z
+      .string()
+      .min(3, "Shop name must be at least 3 characters").optional(),
+
+    shopAddress: z
+      .string()
+      .min(5, "Shop address must be at least 5 characters").optional(),
+
+    phone: z
+      .string()
+      .regex(/^(\+?\d{1,3}[- ]?)?\d{10}$/, "Invalid phone number format").optional(),
+  })
+})
+
 
 export const StoreValidationSchema = {
-    createStoreValidationSchema
+    createStoreValidationSchema,
+    updateStoreValidationScham
 }

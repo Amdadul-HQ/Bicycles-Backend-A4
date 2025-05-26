@@ -33,8 +33,13 @@ const approveStore = async (storeId: string,status:"pending" | "blocked" | "acti
     store.status = status;
     await store.save({ session });
 
+    if(status === "blocked"){
+      await User.findByIdAndUpdate(store.user,{role:"customer",hasStore:false},{session})
+    }
     // ✅ Update user role to 'vendor'
-    await User.findByIdAndUpdate(store.user, { role: "vendor" }, { session });
+    if(status === "active"){
+      await User.findByIdAndUpdate(store.user, { role: "vendor",hasStore:true,store:storeId }, { session });
+    }
 
     // ✅ Commit transaction
     await session.commitTransaction();

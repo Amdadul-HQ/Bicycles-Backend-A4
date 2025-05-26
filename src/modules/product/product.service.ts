@@ -98,7 +98,6 @@ const updateProductIntoDB = async(id:Types.ObjectId,product:IProduct,file:any)=>
     product.image = secure_url as string;
   }
 
-  console.log(product,'update');
 
   const result = await Product.findByIdAndUpdate(id, {...product}, { new: true });
   // console.log(result,'result');
